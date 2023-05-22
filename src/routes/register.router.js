@@ -1,46 +1,34 @@
 import { Router } from 'express';
-import passport from 'passport';
+
+import {
+  currentSession,
+  errorLogin,
+  errorRegister,
+  githubAuthenticate,
+  githubSignup,
+  login,
+  passportLogin,
+  passportLogout,
+  passportRegister,
+  register,
+} from '../controllers/users.controller.js';
 
 const router = Router();
 
-router.get('/', (req, res) => {
-  res.render('register');
-});
-
-router.get('/login', (req, res) => {
-  res.render('login');
-});
-
-router.get('/errorRegister', (req, res) => {
-  res.render('errorRegister');
-});
-
-router.get('/errorLogin', (req, res) => {
-  res.render('errorLogin');
-});
+router.get('/', register);
+router.get('/login', login);
+router.get('/errorRegister', errorRegister);
+router.get('/errorLogin', errorLogin);
 
 //Passport
-router.post('/', passport.authenticate('register', { failureRedirect: '/register/errorRegister' }), (req, res) => {
-  res.redirect('/register/login');
-});
+router.post('/', passportRegister);
+router.post('/login', passportLogin);
+router.post('/logout', passportLogout);
 
-router.post('/login', passport.authenticate('login', { failureRedirect: '/register/errorLogin' }), (req, res) => {
-  res.redirect(`/views/realtimeproducts`);
-});
+//Github
+router.get('/signupGithub', githubSignup);
+router.get('/github', githubAuthenticate);
 
-router.post('/logout', (req, res) => {
-  req.session.destroy(() => {
-    res.redirect('/register/login');
-  });
-});
-
-router.get(
-  '/signupGithub',
-  passport.authenticate('github', { scope: ['user:email'], failureRedirect: '/register/errorRegister' })
-);
-
-router.get('/github', passport.authenticate('github', { failureRedirect: '/register/errorLogin' }), (req, res) => {
-  res.redirect('/views/realtimeproducts');
-});
+router.get('/current', currentSession);
 
 export default router;
