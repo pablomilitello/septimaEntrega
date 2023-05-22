@@ -1,18 +1,19 @@
 import express from 'express';
+import { __dirname } from './utils.js';
+import session from 'express-session';
+import passport from 'passport';
+import mongoStore from 'connect-mongo';
+import cookieParser from 'cookie-parser';
+import './passport/passportStrategies.js';
+import { Server } from 'socket.io';
+import handlebars from 'express-handlebars';
+import './DAL/dbConfig.js';
+import config from './config.js';
 import productsRouter from './routes/products.router.js';
 import cartsRouter from './routes/carts.router.js';
-import { __dirname } from './utils.js';
-import handlebars from 'express-handlebars';
 import viewsRouter from './routes/views.router.js';
-import { Server } from 'socket.io';
-import './db/dbConfig.js';
-import ProductManager from '../src/Dao/ProductManagerMongo.js';
-import cookieParser from 'cookie-parser';
-import session from 'express-session';
 import registerRouter from './routes/register.router.js';
-import mongoStore from 'connect-mongo';
-import passport from 'passport';
-import './passport/passportStrategies.js';
+import ProductManager from '../src/DAL/ProductManagerMongo.js';
 
 const path = __dirname + '/products.json';
 const productManager = new ProductManager(path);
@@ -32,7 +33,8 @@ app.set('view engine', 'handlebars');
 app.use(cookieParser('secretPass'));
 
 //Mongo Sessions
-const URI = 'mongodb+srv://pmilitello:12345@cluster0.op8ms3d.mongodb.net/ecommerce?retryWrites=true&w=majority';
+const URI = config.mongo_uri;
+
 app.use(
   session({
     store: new mongoStore({
@@ -77,7 +79,7 @@ app.get('/readCookieSigned', (req, res) => {
   res.json({ message: 'Cookies Signed', cookieSigned1 });
 });
 
-const PORT = 8080;
+const PORT = config.port;
 
 //Configuro el SocketServer
 const httpServer = app.listen(PORT, () => console.log(`Listen in port ${PORT}`));

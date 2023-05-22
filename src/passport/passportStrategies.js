@@ -1,9 +1,9 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as GithubStrategy } from 'passport-github2';
-import { userModel } from '../db/models/users.model.js';
+import { userModel } from '../DAL/models/users.model.js';
 import { compareData, hashData } from '../utils.js';
-import UsersManager from '../Dao/UsersManagerMongo.js';
+import UsersManager from '../DAL/UsersManagerMongo.js';
 
 const usersManager = new UsersManager();
 

@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
+import config from '../config.js';
 
-const URI = 'mongodb+srv://pmilitello:12345@cluster0.op8ms3d.mongodb.net/ecommerce?retryWrites=true&w=majority';
+const URI = config.mongo_uri;
 
 mongoose
   .connect(URI)
   .then(() => console.log('Database connected'))
-
   .catch((error) => console.log(error));
