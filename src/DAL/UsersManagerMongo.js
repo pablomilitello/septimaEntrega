@@ -25,19 +25,19 @@ class UsersManager {
     }
   }
 
-  async updateUser(id, obj) {
+  async findUserById(id) {
     try {
-      const updateUser = await userModel.updateOne({ _id: id }, { $set: obj });
-      return updateUser;
+      const user = await userModel.findById(id);
+      return user;
     } catch (error) {
       return error;
     }
   }
 
-  async findUserById(id) {
+  async updateUser(id, obj) {
     try {
-      const user = await userModel.findById(id);
-      return user;
+      const updateUser = await userModel.updateOne({ _id: id }, { $set: obj });
+      return updateUser;
     } catch (error) {
       return error;
     }
