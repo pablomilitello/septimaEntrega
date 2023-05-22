@@ -2,10 +2,10 @@ import { productModel } from './models/products.model.js';
 import { TRUE, FALSE } from '../utils.js';
 
 class ProductManager {
-  findAll = async (limit, page, sortDir, category, availability, lean = false) => {
+  findAll = async (limit, page, sort, category, availability, lean = false) => {
     try {
       const options = { page, limit, lean };
-      if (sortDir) {
+      if (sort) {
         options.sort = { price: sortDir };
       }
       const query = {};

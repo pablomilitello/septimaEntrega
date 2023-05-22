@@ -5,9 +5,9 @@ const path = __dirname + '/products.json';
 
 const productManager = new ProductManager(path);
 
-export const findAllProducts = async (limit, page, sortDir, category, availability) => {
+export const findAllProducts = async (limit, page, sort, category, availability) => {
   try {
-    const products = productManager.findAll(limit, page, sortDir, category, availability);
+    const products = await productManager.findAll(limit, page, sort, category, availability);
     return products;
   } catch (error) {
     return error;
@@ -16,7 +16,7 @@ export const findAllProducts = async (limit, page, sortDir, category, availabili
 
 export const findProductById = async (id) => {
   try {
-    const product = productManager.findById(id);
+    const product = await productManager.findById(id);
     return product;
   } catch (error) {
     return error;
@@ -25,7 +25,7 @@ export const findProductById = async (id) => {
 
 export const createOneProduct = async (obj) => {
   try {
-    const newProduct = productManager.createOne(obj);
+    const newProduct = await productManager.createOne(obj);
     return newProduct;
   } catch (error) {
     return error;
@@ -34,7 +34,7 @@ export const createOneProduct = async (obj) => {
 
 export const updateOneProduct = async (pid, obj) => {
   try {
-    const product = productManager.updateOne(pid, obj);
+    const product = await productManager.updateOne(pid, obj);
     return product;
   } catch (error) {
     return error;
@@ -43,7 +43,7 @@ export const updateOneProduct = async (pid, obj) => {
 
 export const deleteAllProducts = async () => {
   try {
-    const product = productManager.deleteAll();
+    const product = await productManager.deleteAll();
     return product;
   } catch (error) {
     return error;
@@ -52,7 +52,7 @@ export const deleteAllProducts = async () => {
 
 export const deleteOneProduct = async (pid) => {
   try {
-    const product = productManager.deleteOne(pid);
+    const product = await productManager.deleteOne(pid);
     return product;
   } catch (error) {
     return error;

@@ -33,7 +33,7 @@ export const getProducts = async (req, res) => {
       return;
     }
 
-    const { docs, totalPages, hasPrevPage, hasNextPage, prevPage, nextPage } = findAllProducts(
+    const { docs, totalPages, hasPrevPage, hasNextPage, prevPage, nextPage } = await findAllProducts(
       parseInt(limit),
       parseInt(page),
       sort,

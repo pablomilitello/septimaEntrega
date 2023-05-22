@@ -7,7 +7,7 @@ const cartManager = new CartManager(path);
 
 export const cartById = async (id) => {
   try {
-    const cart = cartManager.getCartById(id);
+    const cart = await cartManager.getCartById(id);
     return cart;
   } catch (error) {
     return error;
@@ -16,7 +16,7 @@ export const cartById = async (id) => {
 
 export const cartByIdPopulated = async (id) => {
   try {
-    const cart = cartManager.getCartById(id);
+    const cart = await cartManager.getCartById(id);
     return cart;
   } catch (error) {
     return error;
@@ -25,7 +25,7 @@ export const cartByIdPopulated = async (id) => {
 
 export const createOne = async () => {
   try {
-    const newCart = cartManager.addCarts();
+    const newCart = await cartManager.addCarts();
     return newCart;
   } catch (error) {
     return error;
@@ -34,7 +34,7 @@ export const createOne = async () => {
 
 export const productsToCart = async (cid, pid) => {
   try {
-    const cart = cartManager.addProductsToCart(cid, pid);
+    const cart = await cartManager.addProductsToCart(cid, pid);
     return cart;
   } catch (error) {
     return error;
@@ -43,7 +43,7 @@ export const productsToCart = async (cid, pid) => {
 
 export const deleteProduct = async (cid, pid) => {
   try {
-    const cart = cartManager.deleteProductFromCart(cid, pid);
+    const cart = await cartManager.deleteProductFromCart(cid, pid);
     return cart;
   } catch (error) {
     return error;
@@ -52,7 +52,7 @@ export const deleteProduct = async (cid, pid) => {
 
 export const updateOne = async (id, products) => {
   try {
-    const cart = cartManager.updateCart(id, products);
+    const cart = await cartManager.updateCart(id, products);
     return cart;
   } catch (error) {
     return error;
@@ -61,7 +61,7 @@ export const updateOne = async (id, products) => {
 
 export const updateOneProduct = async (id, pid, quantity) => {
   try {
-    const cart = cartManager.updateCartProduct(id, pid, quantity);
+    const cart = await cartManager.updateCartProduct(id, pid, quantity);
     return cart;
   } catch (error) {
     return error;
@@ -70,7 +70,7 @@ export const updateOneProduct = async (id, pid, quantity) => {
 
 export const deleteAllProducts = async (id) => {
   try {
-    const cart = cartManager.deleteAllProductsFromCart(id);
+    const cart = await cartManager.deleteAllProductsFromCart(id);
     return cart;
   } catch (error) {
     return error;
