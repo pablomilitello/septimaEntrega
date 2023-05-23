@@ -37,7 +37,7 @@ class CartManager {
         return "Error: Cart doesn't exist";
       } else {
         const productManager = new ProductManager();
-        const prod = await productManager.getProductById(pid);
+        const prod = await productManager.findById(pid);
         if (!prod) {
           return "Error: Product doesn't exist";
         }

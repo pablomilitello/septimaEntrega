@@ -6,7 +6,7 @@ import {
   findProductById,
   updateOneProduct,
 } from '../services/products.services.js';
-import { validateInteger } from '../utils.js';
+import { validateBoolean, validateInteger, validateSort } from '../utils.js';
 
 export const getProducts = async (req, res) => {
   try {
