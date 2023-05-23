@@ -8,12 +8,13 @@ import './passport/passportStrategies.js';
 import { Server } from 'socket.io';
 import handlebars from 'express-handlebars';
 import './DAL/dbConfig.js';
-import config from './config.js';
+import { MONGO_URI, PORT } from './config.js';
 import productsRouter from './routes/products.router.js';
 import cartsRouter from './routes/carts.router.js';
 import viewsRouter from './routes/views.router.js';
 import registerRouter from './routes/register.router.js';
 import ProductManager from '../src/DAL/ProductManagerMongo.js';
+import sessionsRouter from './routes/sessions.router.js';
 
 const path = __dirname + '/products.json';
 const productManager = new ProductManager(path);
@@ -33,16 +34,14 @@ app.set('view engine', 'handlebars');
 app.use(cookieParser('secretPass'));
 
 //Mongo Sessions
-const URI = config.mongo_uri;
-
 app.use(
   session({
     store: new mongoStore({
-      mongoUrl: URI,
+      mongoUrl: MONGO_URI,
     }),
     secret: 'secretSession',
     cookie: {
-      maxAge: 120000,
+      maxAge: 12000000,
     },
   })
 );
@@ -56,6 +55,7 @@ app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
 app.use('/views', viewsRouter);
 app.use('/register', registerRouter);
+app.use('/api/sessions', sessionsRouter);
 
 app.get('/createCookie', (req, res) => {
   res.cookie('cookie2', 'Second Cookie').send('Cookie added');
@@ -79,8 +79,6 @@ app.get('/readCookieSigned', (req, res) => {
   res.json({ message: 'Cookies Signed', cookieSigned1 });
 });
 
-const PORT = config.port;
-
 //Configuro el SocketServer
 const httpServer = app.listen(PORT, () => console.log(`Listen in port ${PORT}`));
 
@@ -96,12 +94,12 @@ socketServer.on('connection', (socket) => {
   });
 
   socket.on('addNewProduct', async (product) => {
-    await productManager.addProducts(product);
+    await productManager.createOne(product);
   });
 
   socket.on('deleteProduct', (id) => {
     console.log(`Product deleted ${id}`);
-    productManager.deleteProductsById(id);
+    productManager.deleteOne(id);
   });
 
   socket.on('message', (info) => {

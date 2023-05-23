@@ -4,8 +4,11 @@ import { Strategy as GithubStrategy } from 'passport-github2';
 import { userModel } from '../DAL/models/users.model.js';
 import { compareData, hashData } from '../utils.js';
 import UsersManager from '../DAL/UsersManagerMongo.js';
+import CartManager from '../DAL/CartManagerMongo.js';
+import { ADMIN_EMAIL, GITHUB_CALLBACK_URL, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from '../config.js';
 
 const usersManager = new UsersManager();
+const cartManager = new CartManager();
 
 //Local Strategy
 passport.use(
@@ -42,7 +45,11 @@ passport.use(
         return done(null, false);
       }
       const hashPassword = await hashData(password);
-      const newUser = { ...req.body, password: hashPassword };
+      const newCart = await cartManager.addCarts();
+      const newUser = { ...req.body, password: hashPassword, cart: newCart.id };
+      if (email === ADMIN_EMAIL) {
+        newUser.role = 'admin';
+      }
       const newUserDB = await userModel.create(newUser);
       done(null, newUserDB);
     }
@@ -54,9 +61,9 @@ passport.use(
   'github',
   new GithubStrategy(
     {
-      clientID: 'Iv1.ef7ef58937b33c2b',
-      clientSecret: '109909b263393820ed65c07ea5d19def613efc47',
-      callbackURL: 'http://localhost:8080/register/github',
+      clientID: GITHUB_CLIENT_ID,
+      clientSecret: GITHUB_CLIENT_SECRET,
+      callbackURL: GITHUB_CALLBACK_URL,
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
@@ -65,10 +72,12 @@ passport.use(
         if (userDB) {
           return done(null, userDB);
         }
+        const newCart = await cartManager.addCarts();
         const newUser = {
           firstName: profile._json.name.split(' ')[0],
           lastName: profile._json.name.split(' ')[1] || '',
           email,
+          cart: newCart.id,
         };
         const newUserDB = await userModel.create(newUser);
         done(null, newUserDB);

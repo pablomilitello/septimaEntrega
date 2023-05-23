@@ -7,7 +7,7 @@ import {
   getCartByIdPopulated,
   updateCart,
   updateCartProduct,
-} from '../controllers/carts.controllers.js';
+} from '../controllers/carts.controller.js';
 
 const router = Router();
 

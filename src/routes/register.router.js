@@ -1,11 +1,11 @@
 import { Router } from 'express';
+import passport from 'passport';
 
 import {
   currentSession,
   errorLogin,
   errorRegister,
   githubAuthenticate,
-  githubSignup,
   login,
   passportLogin,
   passportLogout,
@@ -21,13 +21,19 @@ router.get('/errorRegister', errorRegister);
 router.get('/errorLogin', errorLogin);
 
 //Passport
-router.post('/', passportRegister);
-router.post('/login', passportLogin);
+router.post('/', passport.authenticate('register', { failureRedirect: '/register/errorRegister' }), passportRegister);
+router.post('/login', passport.authenticate('login', { failureRedirect: '/register/errorLogin' }), passportLogin);
 router.post('/logout', passportLogout);
 
 //Github
-router.get('/signupGithub', githubSignup);
-router.get('/github', githubAuthenticate);
+router.get(
+  '/signupGithub',
+  passport.authenticate('github', {
+    scope: ['user:email'],
+    failureRedirect: '/register/errorRegister',
+  })
+);
+router.get('/github', passport.authenticate('github', { failureRedirect: '/register/errorLogin' }), githubAuthenticate);
 
 router.get('/current', currentSession);
 

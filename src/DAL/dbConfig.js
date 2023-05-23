@@ -1,9 +1,7 @@
 import mongoose from 'mongoose';
-import config from '../config.js';
-
-const URI = config.mongo_uri;
+import { MONGO_URI } from '../config.js';
 
 mongoose
-  .connect(URI)
+  .connect(MONGO_URI)
   .then(() => console.log('Database connected'))
   .catch((error) => console.log(error));
